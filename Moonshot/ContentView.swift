@@ -1,23 +1,20 @@
-//  Working with hierarchical Codable data
+//  How to lay out view in a scrolling grid
 
 import SwiftUI
 
 struct ContentView: View {
+    let layout = [
+        GridItem(.adaptive(minimum: 60, maximum: 120)),
+        GridItem(.adaptive(minimum: 60, maximum: 120)),
+        GridItem(.adaptive(minimum: 60, maximum: 120))
+    ]
+
     var body: some View {
-        Button("Decode JSON") {
-            let input = """
-            {
-                "name": "Khalid Kamil",
-                "address": {
-                    "street": "111, Khalid Kamil Avenue",
-                    "city": "London"
+        ScrollView(.horizontal) {
+            LazyHGrid(rows: layout) {
+                ForEach(0..<1000) {
+                    Text("Item \($0)")
                 }
-            }
-            """
-            let data = Data(input.utf8)
-            let decoder = JSONDecoder()
-            if let user = try? decoder.decode(User.self, from: data) {
-                print(user.address.street)
             }
         }
     }
@@ -27,14 +24,4 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
     }
-}
-
-struct User: Codable {
-    let name: String
-    let address: Address
-}
-
-struct Address: Codable {
-    let street: String
-    let city: String
 }
